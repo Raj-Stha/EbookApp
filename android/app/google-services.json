@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1022444961219",
+    "firebase_url": "https://ebookapp-af49a.firebaseio.com",
+    "project_id": "ebookapp-af49a",
+    "storage_bucket": "ebookapp-af49a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022444961219:android:d2bdf2f32291dbf3e95176",
+        "android_client_info": {
+          "package_name": "com.example.Ebook_App"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1022444961219-7fdkgs5v2v1sb5lb8bc5m9jlfi6ggsnh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZVNo-Q2MjG0bQlrGPYDD-zOiDLPpoDCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1022444961219-7fdkgs5v2v1sb5lb8bc5m9jlfi6ggsnh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
