@@ -21,25 +21,31 @@ class _SearchState extends State<Search> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                Container(
-                  child: TextField(
-                    controller: search,
-                    onChanged: (value) {
-                      setState(() {
-                        bookName = value.toLowerCase();
-                      });
-                    },
-                    decoration: InputDecoration(
-                        hintText: "Search your book here",
-                        prefixIcon: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () => search.clear(),
-                        )),
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: search,
+                        onChanged: (value) {
+                          setState(() {
+                            bookName = value.toLowerCase();
+                          });
+                        },
+                        decoration: InputDecoration(
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            hintText: "Search your book here",
+                            prefixIcon: IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () => search.clear(),
+                            )),
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
@@ -55,14 +61,140 @@ class _SearchState extends State<Search> {
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError)
                         return new Text('Error: ${snapshot.error}');
+
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return new Text('Loading...');
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.blue),
+                              strokeWidth: 3,
+                            ),
+                          );
+
                         default:
-                          return ListView(
+                          return ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot document =
+                                  snapshot.data.docs[index];
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) => BookDetail(
+                                      bookID: document.id,
+                                      bookName: document["BookName"],
+                                      bookImage: document["ImageUrl"],
+                                      authorName: document["AuthorName"],
+                                      bookPDF: document["PDFBook"],
+                                      pdfText: document["PDFText"],
+                                      audioBook: document["AudioBook"],
+                                      bookStatus: document["BookStatus"],
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.27,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.4,
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  boxShadow: <BoxShadow>[
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.4),
+                                                      blurRadius: 5,
+                                                      offset: Offset(8, 8),
+                                                      spreadRadius: 1,
+                                                    )
+                                                  ],
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: Image.network(
+                                                    document["ImageUrl"],
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.27,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  gradient: new LinearGradient(
+                                                    colors: [
+                                                      Colors.black
+                                                          .withOpacity(0.4),
+                                                      Colors.transparent,
+                                                      Colors.black
+                                                          .withOpacity(0.4),
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          document["BookName"],
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          document["AuthorName"],
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+/*
+                        return ListView(
                             children: snapshot.data.docs
                                 .map((DocumentSnapshot document) {
-                              print(document['BookName']);
                               return new Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +357,7 @@ class _SearchState extends State<Search> {
                                 ),
                               );
                             }).toList(),
-                          );
+                          );*/
 
                         /*ListView(
                             children: snapshot.data.docs

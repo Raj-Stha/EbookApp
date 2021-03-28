@@ -12,6 +12,31 @@ class ClientHomePage extends StatefulWidget {
 }
 
 class _ClientHomePageState extends State<ClientHomePage> {
+  Future<bool> exitApp() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            // title: Text("Are you sure?"),
+            content: Text(
+              "Do you want to exit App?",
+              style: TextStyle(fontSize: 17),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                // onPressed: () => SystemNavigator.pop(),
+                child: Text("Yes"),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text("No"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     String fullName;
@@ -19,98 +44,101 @@ class _ClientHomePageState extends State<ClientHomePage> {
     UserFunction userDetails = Provider.of<UserFunction>(context);
     fullName = userDetails.userModel.getUserFullName.split(" ")[0];
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/Home.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: 30,
-                right: 30,
-                top: 50,
-                bottom: 5,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Search()));
-                    },
-                  ),
-                ],
-              ),
+      body: WillPopScope(
+        onWillPop: exitApp,
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/Home.png"),
+              fit: BoxFit.cover,
             ),
-            Expanded(
-              child: Container(
+          ),
+          child: Column(
+            children: [
+              Container(
                 padding: EdgeInsets.only(
-                  top: 40,
-                  left: 14,
+                  left: 30,
+                  right: 30,
+                  top: 50,
+                  bottom: 5,
                 ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Hello,",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                        ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 35,
                       ),
-                      Text(
-                        fullName,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: 15,
-                          bottom: 28,
-                        ),
-                        width: 100,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.blue,
-                        ),
-                      ),
-                      BookSection(
-                        heading: "Sci-fi",
-                      ),
-                      BookSection(
-                        heading: "Trending",
-                      ),
-                      BookSection(
-                        heading: "Latest",
-                      ),
-                    ],
-                  ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => Search()));
+                      },
+                    ),
+                  ],
                 ),
               ),
-            )
-          ],
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: 40,
+                    left: 14,
+                  ),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hello,",
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          fullName,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 15,
+                            bottom: 28,
+                          ),
+                          width: 100,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.blue,
+                          ),
+                        ),
+                        BookSection(
+                          heading: "Sci-fi",
+                        ),
+                        BookSection(
+                          heading: "Trending",
+                        ),
+                        BookSection(
+                          heading: "Latest",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

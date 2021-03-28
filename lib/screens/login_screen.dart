@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var _userEmail;
   var _userPassword;
   String message;
+  bool _isLoading = false;
 
 //Login buttom
 
@@ -147,23 +148,35 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: 20.0,
                               ),
-                              RaisedButton(
-                                child: Padding(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    'Log In',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
+                              _isLoading
+                                  ? CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.blue),
+                                      strokeWidth: 3,
+                                    )
+                                  : RaisedButton(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: Text(
+                                          'Log In',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      onPressed: () {
+                                        _submit();
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
+                                      },
+                                      color: Colors.blue,
                                     ),
-                                  ),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                onPressed: _submit,
-                                color: Colors.blue,
-                              ),
                               SizedBox(
                                 height: 10.0,
                               ),
